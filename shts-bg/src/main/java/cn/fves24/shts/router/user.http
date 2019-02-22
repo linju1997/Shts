@@ -1,0 +1,26 @@
+## User API Test
+
+#### send code
+POST http://localhost/api/v1/code
+Content-Type: application/x-www-form-urlencoded
+
+email=2218890669@qq.com
+
+### check username
+GET http://localhost/api/v1/check/username?username=fves22
+Content-Type: application/x-www-form-urlencoded
+
+### register
+POST http://localhost/api/v1/register
+Content-Type: application/x-www-form-urlencoded
+
+username=fves22&email=2218890669@qq.com&code=338651
+
+### login
+POST http://localhost/api/v1/login
+Content-Type: application/x-www-form-urlencoded
+
+#email=2218890669@qq.com&code=452635&type=2223
+username=fves23&password=1234
+
+###
