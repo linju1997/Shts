@@ -25,6 +25,8 @@ public enum ComMsg {
     CODE_SEND_FAIL(201, "验证码发送失败"),
     CODE_ERROR(20001, "验证码错误"),
     CODE_INVALID(20002, "验证码失效"),
+    CODE_SUCCESS(200003, "验证码正确"),
+
 
     // 用户名
     USERNAME_AVAILABLE(200, "用户名可以使用"),

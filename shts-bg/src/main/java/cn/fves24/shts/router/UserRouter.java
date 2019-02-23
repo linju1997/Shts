@@ -8,15 +8,10 @@ import cn.fves24.shts.redis.CodeRedis;
 import cn.fves24.shts.token.TokenProvider;
 import cn.fves24.shts.validation.Validation;
 import cn.fves24.shts.validation.ValidationResult;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author fves
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(value = "/api/v1")
 @CrossOrigin
 @Log4j2
 public class UserRouter {
@@ -83,7 +78,7 @@ public class UserRouter {
      * @param code 验证码
      * @return 响应Body
      */
-    @PostMapping("/register")
+    @PostMapping(value = "/register")
     public RespVO userRegister(User user, String code) {
         // 入参校验
         ValidationResult validationResult = Validation.validateRegisterParams(user, code);
@@ -94,7 +89,7 @@ public class UserRouter {
 
         // 对比验证码
         ComMsg comMsg = checkCodeWithRedisCode(user.getEmail(), code);
-        if (comMsg != ComMsg.SUCCESS) {
+        if (comMsg != ComMsg.CODE_SUCCESS) {
             return RespVO.newFailRespVO(comMsg);
         }
 
@@ -121,39 +116,39 @@ public class UserRouter {
         log.debug("登录参数：" + user);
         log.debug("验证码：" + code);
         // 未提交登录方式，默认采用账号密码登录
-        // 账号密码登录
         if (type == null || ComMsg.LOGIN_TYPE_1.getCode() == type) {
+            // 账号密码登录
             ValidationResult validationResult = Validation.validateLoginParams(user);
             if (validationResult.isHasErrors()) {
                 return RespVO.newFailRespVO(validationResult.getErrMsg());
             }
-            // TODO
-            ComMsg login = userService.login(user.getUsername(), user.getPassword());
-            if (login == ComMsg.LOGIN_SUCCESS) {
-                return RespVO.newSuccessRespVO(ComMsg.LOGIN_SUCCESS);
+            // TODO  加密密码
+            ComMsg comMsg = userService.login(user.getUsername(), user.getPassword());
+            // 登录 失败
+            if (comMsg != ComMsg.LOGIN_SUCCESS) {
+                return RespVO.newFailRespVO(comMsg);
             }
-            return RespVO.newFailRespVO(login);
-            // 邮箱验证码登录
         } else if (ComMsg.LOGIN_TYPE_2.getCode() == type) {
+            // 邮箱验证码登录
             ValidationResult validationResult = Validation.validateLoginParams(user, code);
             if (validationResult.isHasErrors()) {
                 return RespVO.newFailRespVO(validationResult.getErrMsg());
             }
             // 校验验证码
             ComMsg comMsg = checkCodeWithRedisCode(user.getEmail(), code);
-            if (comMsg != ComMsg.SUCCESS) {
+            // 登陆失败
+            if (comMsg != ComMsg.CODE_SUCCESS) {
                 return RespVO.newFailRespVO(comMsg);
             }
-            // 登陆
-            String token = tokenProvider.makeToken(user.getEmail());
-            // TODO token
-            Cookie tokenCookie = new Cookie("token", token);
-            response.addCookie(tokenCookie);
-            response.addHeader(HttpHeaders.LOCATION, Constants.PAGE_INDEX);
-            return RespVO.newSuccessRespVO(ComMsg.LOGIN_SUCCESS);
         } else {
             return RespVO.newFailRespVO(ComMsg.LOGIN_TYPE_INVALID);
         }
+        // 登录成功，生成Token Cookie
+        String token = tokenProvider.makeToken(user.getEmail());
+        // TODO token
+        Cookie tokenCookie = new Cookie("token", token);
+        response.addCookie(tokenCookie);
+        return RespVO.newSuccessRespVO(ComMsg.LOGIN_SUCCESS);
     }
 
     /**
@@ -169,8 +164,8 @@ public class UserRouter {
         }
         // 获取验证码
         String code = CommonUtil.getRandomCode();
-        // 发送验证码
-        emailTools.sendEmailCode(email, code);
+        // 发送验证码 TODO 暂时关闭QQ邮箱发送验证码
+        /* CommonUtil.threadPolls.submit(() ->emailTools.sendEmailCode(email, code)); */
         // 将验证码放入到redis数据库中
         codeRedis.saveCode(email, code);
         log.debug("验证码已发送:" + code);
@@ -196,6 +191,6 @@ public class UserRouter {
         }
         // 验证成功，删除验证码
         codeRedis.deleteCode(email);
-        return ComMsg.SUCCESS;
+        return ComMsg.CODE_SUCCESS;
     }
 }

@@ -1,11 +1,11 @@
-import cookie from 'vue-cookies';
-import axios from 'axios';
-
+import cookie from 'vue-cookies'
 export default {
     // 接口
     api: {
         sendCode: '/api/v1/code',
         login: '/api/v1/login',
+        register: '/api/v1/register',
+
         validateLogin: '/api/v1/login/validate'
     },
     // 检测登陆状态
@@ -26,8 +26,14 @@ export default {
         }
         return true;
     },
+    validatePassword: function (password) {
+        if (password.length === 0) {
+            return false;
+        }
+        return true;
+    },
     validateEmail: function (email) {
-        let reg = new RegExp("^[0-9]{5,10}$");
+        let reg = new RegExp("^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$");
         return reg.test(email);
 
     },
@@ -35,20 +41,5 @@ export default {
         let reg = new RegExp("^[0-9]{6}$");
         return reg.test(code);
     },
-    /**
-     * 验证码倒计时
-     */
-    countDownTime: 60,
-    countDown: function (VNode) {
-        let el = VNode.$el;
-        if (this.countDownTime <= 0) {
-            el.textContent = "重新发送验证码";
-            this.countDownTime = 60;
-        } else {
-            setTimeout(() => {
-                el.textContent = this.countDownTime-- + 's';
-                this.countDown(VNode);
-            }, 1000);
-        }
-    }
+
 }

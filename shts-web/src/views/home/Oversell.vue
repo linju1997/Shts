@@ -36,7 +36,7 @@
             return {
                 productList: [
                     {
-                        title: '标题',
+                        titleName: '标题',
                         desc: '商品描述',
                         price: '100',
                         oldPrice: '199',
@@ -45,7 +45,7 @@
                         status: 2 // 交易完成
                     },
                     {
-                        title: '标题',
+                        titleName: '标题',
                         desc: '商品描述',
                         price: '100',
                         oldPrice: '199',
@@ -55,7 +55,7 @@
 
                     },
                     {
-                        title: '标题',
+                        titleName: '标题',
                         desc: '商品描述',
                         price: '100',
                         oldPrice: '199',
@@ -65,7 +65,7 @@
 
                     },
                     {
-                        title: '标题',
+                        titleName: '标题',
                         desc: '商品描述',
                         price: '100',
                         oldPrice: '199',

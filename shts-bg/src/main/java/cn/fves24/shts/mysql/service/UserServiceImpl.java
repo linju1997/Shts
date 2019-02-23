@@ -32,10 +32,10 @@ public class UserServiceImpl implements UserService {
         if (existByEmail(email)) {
             return ComMsg.EMAIL_EXIST;
         }
-        if (userMapper.insertUser(username, email) == 1) {
-            return ComMsg.REGISTER_SUCCESS;
+        if (userMapper.insertUser(username, email) != 1) {
+            return ComMsg.REGISTER_FAIL;
         }
-        return ComMsg.REGISTER_FAIL;
+        return ComMsg.REGISTER_SUCCESS;
     }
 
     @Override

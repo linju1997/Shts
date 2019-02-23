@@ -51,9 +51,9 @@
             }
         },
         beforeCreate() {
-            // if (!this.$common.checkLoginStatus()) {
-            //     this.$router.push('/login');
-            // }
+            if (!this.$cm.checkLoginStatus()) {
+                this.$router.push('/login');
+            }
         }
     }
 </script>
