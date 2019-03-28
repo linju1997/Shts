@@ -1,0 +1,41 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+#### send code
+POST {{host}}/code
+Content-Type: application/x-www-form-urlencoded
+
+email=5555555555@qq.com
+
+###
+POST {{host}}/userinfo
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{token}}
+
+email=2218890669@qq.com
+###
+POST {{host}}/userinfo/update
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{token}}
+
+phone=vda&address=江西&remark=remark
+
+###
+POST {{host}}/modify/username
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{token}}
+
+username="fves23"
+
+###
+POST {{host}}/modify/email
+Content-Type: application/x-www-form-urlencoded
+Cookie: {{token}}
+
+newEmail=5555555555@qq.com&code=985199
+
+###

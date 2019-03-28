@@ -2,9 +2,11 @@ package cn.fves24.shts.validation;
 
 import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.Constants;
+import cn.fves24.shts.model.FeedBack;
 import cn.fves24.shts.model.User;
 import org.springframework.util.StringUtils;
 
+import java.sql.ResultSet;
 import java.util.regex.Pattern;
 
 /**
@@ -46,7 +48,7 @@ public class Validation {
      * 登录方式：邮箱验证码
      *
      * @param user 用户
-     * @param code  验证码
+     * @param code 验证码
      * @return 校验结果
      */
     public static ValidationResult validateLoginParams(User user, String code) {
@@ -55,6 +57,33 @@ public class Validation {
         return getValidationResult(validateEmail, validateCode);
     }
 
+    /**
+     * 校验反馈入参
+     *
+     * @param feedBack 反馈
+     * @return 校验结果
+     */
+    public static ValidationResult validateFeedBackParams(FeedBack feedBack) {
+        ValidationResult result = new ValidationResult();
+        if (StringUtils.isEmpty(feedBack.getType()) ||
+                StringUtils.isEmpty(feedBack.getContact()) ||
+                StringUtils.isEmpty(feedBack.getContent())) {
+            result.addMsg(ComMsg.getFail("参数为空"));
+        }
+        return result;
+    }
+
+    /**
+     * 校验 修改邮箱入参
+     * @param email 邮箱
+     * @param code 验证码
+     * @return 校验结果
+     */
+    public static ValidationResult validateModifyEmailParams(String email, String code) {
+        ValidationResult validateEmailResult = validateEmail(email);
+        ValidationResult validateCodeResult = validateCode(code);
+        return getValidationResult(validateEmailResult, validateCodeResult);
+    }
 
     /**
      * 校验邮箱
@@ -128,6 +157,14 @@ public class Validation {
         return result;
     }
 
+    public static ValidationResult validateAddress(String address) {
+        ValidationResult result = new ValidationResult();
+        if (StringUtils.isEmpty(address)) {
+            result.addMsg(ComMsg.getFail("地址不能为空"));
+            return result;
+        }
+        return result;
+    }
     private static ValidationResult getValidationResult(ValidationResult... validationResults) {
         ValidationResult result = new ValidationResult();
         for (ValidationResult validationResult : validationResults) {

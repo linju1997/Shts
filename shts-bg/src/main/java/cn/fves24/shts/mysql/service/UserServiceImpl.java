@@ -1,7 +1,6 @@
 package cn.fves24.shts.mysql.service;
 
 import cn.fves24.shts.common.ComMsg;
-import cn.fves24.shts.common.Constants;
 import cn.fves24.shts.mysql.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ComMsg register(String username, String email) {
+    public ComMsg
+    register(String username, String email) {
         if (existByUsername(username)) {
             return ComMsg.USERNAME_EXIST;
         }
@@ -36,21 +36,6 @@ public class UserServiceImpl implements UserService {
             return ComMsg.REGISTER_FAIL;
         }
         return ComMsg.REGISTER_SUCCESS;
-    }
-
-    @Override
-    public ComMsg login(String username, String password) {
-        String dbPassword = userMapper.selectPasswordByUsername(username);
-        if (!existByUsername(username)) {
-            return ComMsg.UNREGISTERED;
-        }
-        if (Constants.EMPTY_VALUE.equals(dbPassword)) {
-            return ComMsg.PASSWORD_UNSET;
-        }
-        if (!dbPassword.equals(password)) {
-            return ComMsg.LOGIN_FAIL;
-        }
-        return ComMsg.LOGIN_SUCCESS;
     }
 
     @Override

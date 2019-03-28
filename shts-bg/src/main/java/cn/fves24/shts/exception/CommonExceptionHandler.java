@@ -19,7 +19,7 @@ public class CommonExceptionHandler {
     public RespVO commonExceptionHandler(CommonException e) {
         e.printStackTrace();
         // 自定义异常，给用户返回异常信息
-        return RespVO.newFailRespVO(ComMsg.getFail(e.getMessage()));
+        return RespVO.getFail(ComMsg.getFail(e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -28,6 +28,6 @@ public class CommonExceptionHandler {
         // TODO
         // 系统运行时异常，后面采用将错误信息保存到数据库中，给用户返回一个错误码
         e.printStackTrace();
-        return RespVO.newFailRespVO(ComMsg.SYSTEM_EXCEPTION);
+        return RespVO.getFail(ComMsg.SYSTEM_EXCEPTION);
     }
 }

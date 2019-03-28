@@ -5,8 +5,7 @@ package cn.fves24.shts.common;
  */
 public class Constants {
 
-
-    public static String PAGE_INDEX = "http://shts.fengkmm.me";
+    public static String SECRET = "VNAjkdOJe456215";
 
     public static String EMPTY_VALUE = " ";
 
@@ -20,5 +19,7 @@ public class Constants {
 
     public static int CODE_LENGTH = 6;
 
-
+    public static String LOGIN_KEY = "login";
+    public static String LOGIN_YES = "yes";
+    public static String LOGIN_NO = "no";
 }

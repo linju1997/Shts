@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public interface UserMapper {
 
+    @Select("select `id`,`username`,`email`,`phone`,`address`,`remark`,`created`,`modify` " +
+            "from user " +
+            "where `email` = #{email} ")
+    User selectUserInfo(String email);
+
     /**
      * 用户注册，用户只能通过邮箱注册
      *
@@ -22,15 +27,6 @@ public interface UserMapper {
      */
     @Insert("insert ignore into user(`username`,`email`) values (#{username},#{email})")
     Integer insertUser(@Param("username") String username, @Param("email") String email);
-
-    /**
-     * 通过用户名查询用户密码
-     *
-     * @param username 用户名
-     * @return 查询成功返回密码，失败返回null
-     */
-    @Select("select `password` from user where `username`=#{username}")
-    String selectPasswordByUsername(String username);
 
     /**
      * 更新用户信息
@@ -77,4 +73,8 @@ public interface UserMapper {
      */
     @Update("update user set `email`=#{newEmail},`modify`=current_timestamp where `email` = #{email}")
     Integer modifyEmail(@Param("email") String email, @Param("newEmail") String newEmail);
+
+
+    @Update("update user set `address`=#{address},`modify`=current_timestamp where `email`=#{email} ")
+    Integer modifyAddress(@Param("email") String email, @Param("address") String address);
 }

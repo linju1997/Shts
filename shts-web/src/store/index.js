@@ -4,15 +4,17 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    state: {
-        tabActive: 0
+  state: {
+    tabActive: 0,
+    userInfo: {}
+  },
+  mutations: {
+    changeActive(state, active) {
+      state.tabActive = active;
     },
-    mutations: {
-        changeActive(state, active) {
-            state.tabActive = active
-        }
-
-    },
-    actions: {
+    changeUserInfo(state, userinfo) {
+      state.userInfo = userinfo;
     }
+  },
+  actions: {}
 })

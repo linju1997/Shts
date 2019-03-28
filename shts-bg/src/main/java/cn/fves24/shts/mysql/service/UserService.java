@@ -14,15 +14,6 @@ public interface UserService {
      */
     ComMsg register(String username, String email);
 
-
-    /**
-     * 登录
-     * @param username 用户名
-     * @param password 密码
-     * @return 登录结果
-     */
-    ComMsg login(String username, String password);
-
     /**
      * 用户名是否存在
      * @param username 用户名

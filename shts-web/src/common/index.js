@@ -1,36 +1,17 @@
-import cookie from 'vue-cookies'
 export default {
     // 接口
     api: {
         sendCode: '/api/v1/code',
         login: '/api/v1/login',
         register: '/api/v1/register',
+        feedback: '/api/v1/feedback',
 
-        validateLogin: '/api/v1/login/validate'
-    },
-    // 检测登陆状态
-    checkLoginStatus: function () {
-        let token = cookie.get("token");
-        if (token !== null) {
-            return true;
-            // axios.post(this.api.validateLogin,{token: token}, (ret) => {
-            //     }).catch(() => {
-            //
-            // });
-        }
-        return false;
+        // UserInfo
+        getUserInfo: '/api/v1/userinfo'
     },
     validateUsername: function (username) {
-        if (username.length === 0) {
-            return false;
-        }
-        return true;
-    },
-    validatePassword: function (password) {
-        if (password.length === 0) {
-            return false;
-        }
-        return true;
+        return username.length >= 6;
+
     },
     validateEmail: function (email) {
         let reg = new RegExp("^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$");

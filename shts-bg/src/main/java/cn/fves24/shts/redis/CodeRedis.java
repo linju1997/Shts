@@ -1,5 +1,6 @@
 package cn.fves24.shts.redis;
 
+import cn.fves24.shts.common.ComMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class CodeRedis {
      * @param email 用户邮箱
      * @return 验证码
      */
-    public String getCode(String email) {
+    private String getCode(String email) {
         return template.opsForValue().get(email);
     }
 
@@ -46,7 +47,29 @@ public class CodeRedis {
      * 删除验证码
      * @param email 用户邮箱
      */
-    public  void deleteCode(String email) {
+    private  void deleteCode(String email) {
         template.delete(email);
+    }
+
+    /**
+     * 对比验证验证码
+     *
+     * @param email 邮箱
+     * @param code  验证码
+     * @return 验证码相等返回 ComMsg.SUCCESS，否则返回错误信息
+     */
+    public ComMsg checkCodeWithRedisCode(String email, String code) {
+        String redisCode = this.getCode(email);
+        // Redis数据库中没有数据，验证码失效，获取没有获取验证码
+        if (redisCode == null) {
+            return ComMsg.CODE_INVALID;
+        }
+        // 验证码错误
+        if (!redisCode.equals(code)) {
+            return ComMsg.CODE_ERROR;
+        }
+        // 验证成功，删除验证码
+        this.deleteCode(email);
+        return ComMsg.CODE_SUCCESS;
     }
 }

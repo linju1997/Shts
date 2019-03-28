@@ -28,8 +28,12 @@ public class ValidationResult {
         this.msgs.addAll(msgs);
     }
 
-    public List<ComMsg> getErrMsg() {
-        return this.msgs;
+    public ComMsg getErrMsg() {
+        StringBuilder errMsg = new StringBuilder();
+        for (ComMsg msg : msgs) {
+            errMsg.append(msg.getMsg()).append(",");
+        }
+        return ComMsg.getFail(errMsg.toString());
     }
 
     public boolean isHasErrors() {

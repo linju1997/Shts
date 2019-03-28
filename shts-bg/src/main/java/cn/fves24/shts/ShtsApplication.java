@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author fves
  */
-@MapperScan(basePackages = {"cn.fves24.mysql.mapper.UserMapper"})
+@MapperScan(basePackages = {"cn.fves24.shts.mysql.mapper"})
 @SpringBootApplication
 public class ShtsApplication {
 

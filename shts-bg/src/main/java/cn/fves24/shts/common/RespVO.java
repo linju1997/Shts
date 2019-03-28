@@ -7,35 +7,46 @@ package cn.fves24.shts.common;
  */
 public class RespVO {
     /**
-     * 响应状态，“"success"或者”"fail"
+     * data 保存 api 返回的结果
      */
-    private String status;
+    private Integer status;
 
-    /**
-     * 响应状态为"success"，则该变量为响应数据
-     * 响应状态为"fail",则该变量为错误信息
-     */
+    private String errMsg;
+
     private Object data;
 
-    private RespVO(String status, Object data) {
+    private RespVO(int status, String errMsg, Object data) {
         this.status = status;
+        this.errMsg = errMsg;
         this.data = data;
     }
 
-    public static RespVO newSuccessRespVO(Object data) {
-        return new RespVO("success", data);
+    public static RespVO getSuccess(ComMsg comMsg) {
+        return new RespVO(comMsg.getCode(), null, comMsg.getMsg());
     }
 
-    public static RespVO newFailRespVO(Object data) {
-        return new RespVO("fail", data);
+    public static RespVO getSuccess(Object data) {
+        return new RespVO(200, null, data);
     }
 
-    public String getStatus() {
+    public static RespVO getFail(ComMsg comMsg) {
+        return new RespVO(comMsg.getCode(), comMsg.getMsg(), null);
+    }
+
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Object getErrMsg() {
+        return errMsg;
+    }
+
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
     }
 
     public Object getData() {
@@ -44,10 +55,5 @@ public class RespVO {
 
     public void setData(Object data) {
         this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

@@ -24,12 +24,12 @@ public class EmailTools {
 
     public void sendEmailCode(String to, String code) throws CommonException {
         String placeholder = "${code}$";
-        String resetPasswordTemplate = "【抽奖系统】你的验证码是:" + placeholder + ",验证码有效期为5分钟。";
+        String resetPasswordTemplate = "你的验证码是:" + placeholder + ",验证码有效期为5分钟。";
         sendMail(to, resetPasswordTemplate.replace(placeholder, code));
     }
 
     private void sendMail(String to, String template) throws CommonException {
-        String subject = "抽奖系统";
+        String subject = "校园二手交易系统";
         String from = "fves24@qq.com";
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();

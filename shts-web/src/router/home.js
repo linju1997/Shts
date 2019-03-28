@@ -8,19 +8,39 @@ export default [
         component: () => import('../views/home/Oversell.vue')
     },
     {
-        path: '/address',
-        component: () => import('../views/home/address/Address.vue')
+        path: '/buy',
+        component: () => import('../views/home/Buy.vue')
     },
     {
-        path: '/contact',
-        component: () => import('../views/home/Contact.vue')
+        path: '/collection',
+        component: () => import('../views/home/Collection.vue')
     },
     {
-        path: '/question',
-        component: () => import('../views/home/Question.vue')
+        path: '/feedback',
+        component: () => import('../views/home/FeedBack.vue')
     },
     {
-        path: '/setting',
-        component: () => import('../views/home/setting/Setting.vue')
+        path: '/about',
+        component: () => import('../views/home/About.vue')
+    },
+    {
+        path: '/userinfo/edit',
+        component: () => import('../views/home/UserInfoEdit.vue')
+    },
+    {
+        path: '/userinfo/modify/username',
+        component: () => import('../views/home/modify/ModifyUsername.vue')
+    },
+    {
+        path: '/userinfo/modify/email',
+        component: () => import('../views/home/modify/ModifyEmail.vue')
+    },
+    {
+        path: '/userinfo/modify/phone',
+        component: () => import('../views/home/modify/ModifyPhoneNumber.vue')
+    },
+    {
+        path: '/userinfo/modify/address',
+        component: () => import('../views/home/modify/ModifyAddress.vue')
     }
 ];
