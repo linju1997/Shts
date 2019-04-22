@@ -2,8 +2,11 @@ package cn.fves24.shts.validation;
 
 import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.Constants;
+import cn.fves24.shts.model.Collection;
 import cn.fves24.shts.model.FeedBack;
+import cn.fves24.shts.model.Goods;
 import cn.fves24.shts.model.User;
+import io.netty.util.internal.StringUtil;
 import org.springframework.util.StringUtils;
 
 import java.sql.ResultSet;
@@ -75,8 +78,9 @@ public class Validation {
 
     /**
      * 校验 修改邮箱入参
+     *
      * @param email 邮箱
-     * @param code 验证码
+     * @param code  验证码
      * @return 校验结果
      */
     public static ValidationResult validateModifyEmailParams(String email, String code) {
@@ -84,6 +88,15 @@ public class Validation {
         ValidationResult validateCodeResult = validateCode(code);
         return getValidationResult(validateEmailResult, validateCodeResult);
     }
+
+    public static ValidationResult validateCollection(Collection collection) {
+        ValidationResult result = new ValidationResult();
+        if (collection.getId() == 0 || collection.getGoodsId() == 0) {
+            result.addMsg(ComMsg.getFail("参数不能为空"));
+        }
+        return result;
+    }
+
 
     /**
      * 校验邮箱
@@ -165,6 +178,7 @@ public class Validation {
         }
         return result;
     }
+
     private static ValidationResult getValidationResult(ValidationResult... validationResults) {
         ValidationResult result = new ValidationResult();
         for (ValidationResult validationResult : validationResults) {
@@ -178,5 +192,15 @@ public class Validation {
     private static boolean pattern(String regex, String s) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(s).find();
+    }
+
+    public static ValidationResult validateGoods(Goods goods) {
+        ValidationResult result = new ValidationResult();
+        if (StringUtils.isEmpty(goods.getTitle()) ||
+                StringUtils.isEmpty(goods.getDesc())
+        ) {
+            result.addMsg(ComMsg.PARAMETER_ERROR);
+        }
+        return result;
     }
 }

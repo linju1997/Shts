@@ -2,3 +2,4 @@ shts-bg/target
 shts-web/node_modules
 .idea
 /shts-web/src/config/test.js
+proxy.sh

@@ -1,9 +1,9 @@
 package cn.fves24.shts.router;
 
-import cn.fves24.shts.auth.Authentication;
 import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.RespVO;
 import cn.fves24.shts.model.FeedBack;
+import cn.fves24.shts.model.User;
 import cn.fves24.shts.mysql.mapper.FeedBackMapper;
 import cn.fves24.shts.validation.Validation;
 import cn.fves24.shts.validation.ValidationResult;
@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -21,19 +22,19 @@ import java.util.List;
  * @author fves
  */
 @RestController
-@RequestMapping("/api/v1")
 public class FeedBackRouter {
 
     private FeedBackMapper feedBackMapper;
+    private HttpServletRequest request;
 
 
     @Autowired
-    public FeedBackRouter(FeedBackMapper feedBackMapper) {
+    public FeedBackRouter(FeedBackMapper feedBackMapper, HttpServletRequest request) {
         this.feedBackMapper = feedBackMapper;
+        this.request = request;
     }
 
-    @Authentication
-    @RequestMapping("/feedback")
+    @PostMapping("/feedback")
     private RespVO feedBack(FeedBack feedBack) {
         ValidationResult result = Validation.validateFeedBackParams(feedBack);
         if (result.isHasErrors()) {
@@ -44,12 +45,12 @@ public class FeedBackRouter {
             feedBack.setContactType("邮箱");
         } else if (contact.length() == 11) {
             feedBack.setContactType("手机号码");
-        } else if (contact.length() <= 10) {
+        } else if (contact.length() >= 5 && contact.length() <= 10) {
             feedBack.setContactType("QQ");
         } else {
             feedBack.setContactType("其他");
         }
-        Integer insertFeedBack = feedBackMapper.insertFeedBack(feedBack);
+        Integer insertFeedBack = feedBackMapper.insertFeedBack(getCurrentUser().getId(), feedBack);
         if (insertFeedBack != null && insertFeedBack == 1) {
             return RespVO.getSuccess(ComMsg.FEEDBACK_SUCCESS);
         }
@@ -61,8 +62,7 @@ public class FeedBackRouter {
      *
      * @return 反馈结果
      */
-    @Authentication
-    @PostMapping("/feedback/1")
+    @PostMapping("/feedback/list")
     private RespVO selectFeedBacks() {
         List<FeedBack> feedBacks = feedBackMapper.selectFeedBack();
         return RespVO.getSuccess(feedBacks);
@@ -74,7 +74,6 @@ public class FeedBackRouter {
      * @param id 反馈ID
      * @return 更新结果
      */
-    @Authentication
     @PostMapping("/feedback/update")
     private RespVO updateFeedBackStatus(int id) {
         Integer updateFeedBackStatus = feedBackMapper.updateFeedBack(id);
@@ -82,5 +81,10 @@ public class FeedBackRouter {
             return RespVO.getSuccess(ComMsg.FEEDBACK_PROCESSED);
         }
         return RespVO.getFail(ComMsg.getFail("提交失败，请重新提交"));
+    }
+
+    private User getCurrentUser() {
+        HttpSession session = request.getSession();
+        return (User) session.getAttribute("user");
     }
 }

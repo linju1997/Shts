@@ -5,7 +5,7 @@ import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.RespVO;
 import cn.fves24.shts.model.User;
 import cn.fves24.shts.mysql.mapper.UserMapper;
-import cn.fves24.shts.redis.CodeRedis;
+import cn.fves24.shts.common.RandomCodeUtils;
 import cn.fves24.shts.validation.Validation;
 import cn.fves24.shts.validation.ValidationResult;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.smartcardio.CommandAPDU;
 
 /**
  * 用户修改信息
@@ -22,15 +21,15 @@ import javax.smartcardio.CommandAPDU;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+
 public class UserInfoRouter {
-    private CodeRedis codeRedis;
+    private RandomCodeUtils randomCodeUtils;
     private UserMapper userMapper;
     private HttpSession session;
 
     @Autowired
-    public UserInfoRouter(CodeRedis codeRedis, UserMapper userMapper, HttpSession session) {
-        this.codeRedis = codeRedis;
+    public UserInfoRouter(RandomCodeUtils randomCodeUtils, UserMapper userMapper, HttpSession session) {
+        this.randomCodeUtils = randomCodeUtils;
         this.userMapper = userMapper;
         this.session = session;
     }
@@ -41,7 +40,6 @@ public class UserInfoRouter {
      * @return 用户信息
      */
     @PostMapping("/userinfo")
-    @Authentication
     public RespVO userInfo(@SessionAttribute("email") String email) {
         log.info("查询用户信息,用户邮箱:" + email);
         ValidationResult validationResult = Validation.validateEmail(email);
@@ -65,7 +63,6 @@ public class UserInfoRouter {
      * @return 修改结果
      */
     @PostMapping("/userinfo/update")
-    @Authentication
     public RespVO updateUserInfo(User user, @SessionAttribute("email") String email) {
         user.setEmail(email);
         Integer updateUserInfo = userMapper.updateUserInfo(user);
@@ -82,7 +79,6 @@ public class UserInfoRouter {
      * @return 修改结果
      */
     @PostMapping("/modify/username")
-    @Authentication
     public RespVO modifyUsername(String username, @SessionAttribute("email") String email) {
         log.info("修改用户名，新用户名:" + username + ",用户邮箱:" + email);
         ValidationResult validationResult = Validation.validateUsername(username);
@@ -110,7 +106,6 @@ public class UserInfoRouter {
      * @return 修改结果
      */
     @PostMapping("/modify/email")
-    @Authentication
     public RespVO modifyEmail(String newEmail, String code, @SessionAttribute("email") String email) {
         log.info("修改邮箱，新邮箱:" + newEmail + ",原邮箱:" + email + ",验证码:" + code);
         ValidationResult validationResult = Validation.validateModifyEmailParams(newEmail, code);
@@ -120,7 +115,7 @@ public class UserInfoRouter {
             return RespVO.getFail(validationResult.getErrMsg());
         }
         /* 校验验证码是否正确 */
-        ComMsg checkCodeResult = codeRedis.checkCodeWithRedisCode(newEmail, code);
+        ComMsg checkCodeResult = randomCodeUtils.checkCode(newEmail, code);
         if (checkCodeResult != ComMsg.CODE_SUCCESS) {
             log.info("验证码错误，邮箱修改失败");
             return RespVO.getFail(checkCodeResult);
@@ -145,7 +140,6 @@ public class UserInfoRouter {
      * @return 返回结果
      */
     @PostMapping("/modify/address")
-    @Authentication
     public RespVO modifyAddress(String address, @SessionAttribute("email") String email) {
         log.info("修改地址：" + address);
         ValidationResult validationResult = Validation.validateAddress(address);

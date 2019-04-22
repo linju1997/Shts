@@ -1,14 +1,5 @@
 export default {
-    // 接口
-    api: {
-        sendCode: '/api/v1/code',
-        login: '/api/v1/login',
-        register: '/api/v1/register',
-        feedback: '/api/v1/feedback',
 
-        // UserInfo
-        getUserInfo: '/api/v1/userinfo'
-    },
     validateUsername: function (username) {
         return username.length >= 6;
 

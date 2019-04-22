@@ -5,37 +5,21 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
-#### send code
-POST {{host}}/code
-Content-Type: application/x-www-form-urlencoded
 
-email=5555555555@qq.com
-
-###
-POST {{host}}/userinfo
+POST {{host}}/feedback
 Content-Type: application/x-www-form-urlencoded
 Cookie: {{token}}
 
-email=2218890669@qq.com
-###
-POST {{host}}/userinfo/update
-Content-Type: application/x-www-form-urlencoded
-Cookie: {{token}}
-
-phone=vda&address=江西&remark=remark
+type=商品&contactType=type&contact=contact&content=content
 
 ###
-POST {{host}}/modify/username
+POST {{host}}/feedback/update
 Content-Type: application/x-www-form-urlencoded
-Cookie: {{token}}
 
-username="fves23"
+id=30015
 
 ###
-POST {{host}}/modify/email
-Content-Type: application/x-www-form-urlencoded
+POST {{host}}/feedback/list
 Cookie: {{token}}
-
-newEmail=5555555555@qq.com&code=985199
 
 ###

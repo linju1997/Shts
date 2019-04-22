@@ -4,6 +4,8 @@ import cn.fves24.shts.model.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * UserMapper
  *
@@ -13,6 +15,11 @@ import org.springframework.stereotype.Component;
 @Component
 public interface UserMapper {
 
+    /**
+     * 查询用户信息
+     * @param email 用户邮箱
+     * @return 用户信息
+     */
     @Select("select `id`,`username`,`email`,`phone`,`address`,`remark`,`created`,`modify` " +
             "from user " +
             "where `email` = #{email} ")
@@ -75,6 +82,16 @@ public interface UserMapper {
     Integer modifyEmail(@Param("email") String email, @Param("newEmail") String newEmail);
 
 
+    /**
+     * 修改用户地址
+     * @param email 邮箱
+     * @param address 地址
+     * @return 修改成功返回1，失败返回null
+     */
     @Update("update user set `address`=#{address},`modify`=current_timestamp where `email`=#{email} ")
     Integer modifyAddress(@Param("email") String email, @Param("address") String address);
+
+
+    @Select("select id, username, email, phone, address, remark, created, modify from user")
+    List<User> getUsers();
 }

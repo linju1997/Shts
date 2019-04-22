@@ -56,18 +56,7 @@ create table feedback
   auto_increment = 30000;
 
 
--- IF EXIST DROP TABLE
-drop table if exists collection;
-create table collection
-(
-  `id`       int auto_increment                  not null comment '收藏ID',
-  `user_id`  int                                 not null comment '用户ID',
-  `goods_id` int                                 not null comment '商品ID',
-  `created`  timestamp default current_timestamp not null comment '收藏时间',
-  primary key (`id`)
-) engine = InnoDB
-  default charset = utf8
-  auto_increment = 40000;
+c
 
 
 

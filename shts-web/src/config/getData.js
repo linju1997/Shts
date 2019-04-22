@@ -4,23 +4,23 @@ import fetch from './fetch'
  * API
  */
 let api = {
-  sendCode: '/api/v1/code',
-  login: '/api/v1/login',
-  exit: '/api/v1/exit',
-  register: '/api/v1/register',
+  sendCode: '/code',
+  login: '/login',
+  exit: '/exit',
+  register: '/register',
 
   // UserInfo
-  getUserInfo: '/api/v1/userinfo',
-  updateUserInfo: '/api/v1/userinfo/update',
-  modifyUsername: '/api/v1/modify/username',
-  modifyAddress: '/api/v1/modify/address',
-  modifyEmail: '/api/v1/modify/email',
+  getUserInfo: '/userinfo',
+  updateUserInfo: '/userinfo/update',
+  modifyUsername: '/modify/username',
+  modifyAddress: '/modify/address',
+  modifyEmail: '/modify/email',
 
   // feedback
-  feedback: '/api/v1/feedback',
-  feedback1: '/api/v1/feedback/1',
-  feedback2: '/api/v1/feedback/2',
-  feedbackUpdate: '/api/v1/feedback/udpate'
+  feedback: '/feedback',
+  feedback1: '/feedback/1',
+  feedback2: '/feedback/2',
+  feedbackUpdate: '/feedback/udpate'
 }
 
 /**
