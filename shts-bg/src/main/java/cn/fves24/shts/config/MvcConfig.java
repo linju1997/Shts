@@ -1,4 +1,4 @@
-package cn.fves24.shts.common;
+package cn.fves24.shts.config;
 
 import cn.fves24.shts.auth.AdminIntercept;
 import cn.fves24.shts.auth.AuthenticationIntercept;
@@ -39,10 +39,9 @@ public class MvcConfig implements WebMvcConfigurer {
 
         loginInterceptor.add("/collection");
         loginInterceptor.add("/collection/cancel");
-
-        loginInterceptor.add("/modify/address");
-        loginInterceptor.add("/modify/username");
-        loginInterceptor.add("/modify/email");
+        loginInterceptor.add("/userinfo");
+        loginInterceptor.add("/modify/**");
+        loginInterceptor.add("/feedback/**");
 
         // 需要管理员
         List<String> adminInterceptor = new ArrayList<>();
@@ -64,8 +63,9 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
+                .allowCredentials(true)
                 .allowedHeaders("*")
                 .allowedMethods("*")
-                .allowedOrigins("*");
+                .allowedOrigins("http://fves24.cn:8080");
     }
 }

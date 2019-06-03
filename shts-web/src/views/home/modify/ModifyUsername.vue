@@ -26,13 +26,14 @@
 </template>
 
 <script>
-  import {getUserInfo,modifyUsername} from "../../../config/getData";
+  import {modifyUsername} from "../../../config/getData";
+  import {mapState} from 'vuex'
+
 
   export default {
     name: "ModifyUsername",
     data: function () {
       return {
-        userInfo: {}
       }
     },
     methods:{
@@ -42,7 +43,7 @@
           return;
         }
         modifyUsername({username:this.userInfo.username}).then(res=>{
-          if (res.status === 200) {
+          if (res.status === "success") {
             this.$toast(res.data);
           }else{
             this.$toast(res.errMsg);
@@ -50,15 +51,8 @@
         })
       }
     },
-    created() {
-      getUserInfo().then(res => {
-        if (res.status === 200) {
-          this.userInfo = res.data;
-          this.$store.commit('changeUserInfo', this.userInfo);
-        } else {
-          this.$toast(res.errMsg);
-        }
-      });
+    computed: {
+      ...mapState(['userInfo'])
     }
   }
 </script>

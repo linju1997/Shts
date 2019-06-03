@@ -3,7 +3,7 @@ package cn.fves24.shts.auth;
 import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.Constants;
 import cn.fves24.shts.exception.CommonException;
-import cn.fves24.shts.model.User;
+import cn.fves24.shts.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

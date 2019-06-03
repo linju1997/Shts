@@ -1,11 +1,11 @@
-package cn.fves24.shts.router;
+package cn.fves24.shts.router.user;
 
 import cn.fves24.shts.common.*;
 import cn.fves24.shts.exception.CommonException;
-import cn.fves24.shts.model.User;
+import cn.fves24.shts.entity.User;
 import cn.fves24.shts.mysql.mapper.UserMapper;
 import cn.fves24.shts.mysql.service.UserServiceImpl;
-import cn.fves24.shts.common.RandomCodeUtils;
+import cn.fves24.shts.redis.CodeRedis;
 import cn.fves24.shts.validation.Validation;
 import cn.fves24.shts.validation.ValidationResult;
 import lombok.extern.slf4j.Slf4j;
@@ -25,20 +25,19 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-
 public class UserRouter {
 
     private final UserServiceImpl userService;
     private final UserMapper userMapper;
-    private final RandomCodeUtils randomCodeUtils;
+    private final CodeRedis codeRedis;
     private final EmailTools emailTools;
     private final HttpServletRequest request;
 
     @Autowired
-    public UserRouter(UserServiceImpl userService, UserMapper userMapper, RandomCodeUtils randomCodeUtils, EmailTools emailTools, HttpServletRequest request) {
+    public UserRouter(UserServiceImpl userService, UserMapper userMapper, CodeRedis codeRedis, EmailTools emailTools, HttpServletRequest request) {
         this.userService = userService;
         this.userMapper = userMapper;
-        this.randomCodeUtils = randomCodeUtils;
+        this.codeRedis = codeRedis;
         this.emailTools = emailTools;
         this.request = request;
     }
@@ -82,6 +81,7 @@ public class UserRouter {
      */
     @PostMapping(value = "/register")
     public RespVO userRegister(User user, String code) {
+        log.info("用户注册：{}",user);
         // 入参校验
         ValidationResult validationResult = Validation.validateRegisterParams(user, code);
 
@@ -90,7 +90,7 @@ public class UserRouter {
         }
 
         // 对比验证码
-        ComMsg comMsg = randomCodeUtils.checkCode(user.getEmail(), code);
+        ComMsg comMsg = codeRedis.checkCode(user.getEmail(), code);
         if (comMsg != ComMsg.CODE_SUCCESS) {
             return RespVO.getFail(comMsg);
         }
@@ -98,49 +98,54 @@ public class UserRouter {
         // 注册
         ComMsg register = userService.register(user.getUsername(), user.getEmail());
         if (register == ComMsg.REGISTER_SUCCESS) {
+            // 注册成功
+            HttpSession session = request.getSession(true);
+            log.info("注册成功，用户:{}",session.getId());
+            session.setAttribute(Constants.LOGIN_KEY, Constants.LOGIN_YES);
+            session.setAttribute("email", user.getEmail());
             return RespVO.getSuccess(register);
         }
-        // 注册成功
-        HttpSession session = request.getSession(true);
-        session.setAttribute(Constants.LOGIN_KEY, Constants.LOGIN_YES);
         return RespVO.getFail(register);
     }
 
     /**
      * 登陆
      *
-     * @param user 用户
-     * @param code 验证码
+     * @param email 用户邮箱
+     * @param code  验证码
      * @return 登陆结果
      */
     @RequestMapping("/login")
-    public RespVO userLogin(User user, String code) {
-        log.info("登录参数：" + user);
-        log.info("验证码：" + code);
+    public RespVO userLogin(String email, String code) {
+        log.info("用户登录：{},验证码：{}",email,code);
         // 邮箱验证码登录
-        ValidationResult validationResult = Validation.validateLoginParams(user, code);
+        ValidationResult validationResult = Validation.validateLoginParams(email, code);
         if (validationResult.isHasErrors()) {
             log.debug("登录失败: 参数校验失败");
             return RespVO.getFail(validationResult.getErrMsg());
         }
         // 用户还未注册
-        if (!userService.existByEmail(user.getEmail())) {
+
+        if (!userService.existByEmail(email)) {
             log.debug("登录失败: 用户还未注册");
             return RespVO.getFail(ComMsg.UNREGISTERED);
         }
         // 校验验证码
-        ComMsg comMsg = randomCodeUtils.checkCode(user.getEmail(), code);
+        ComMsg comMsg = codeRedis.checkCode(email, code);
         // 登陆失败
         if (comMsg != ComMsg.CODE_SUCCESS) {
             log.debug("登录失败: 验证码校验失败");
             return RespVO.getFail(comMsg);
         }
-        log.debug("登录成功");
         // 登录成功，创建一个Session，并将用户信息放入session
         HttpSession session = request.getSession(true);
-        user = userMapper.selectUserInfo(user.getEmail());
+        log.info("用户登录成功,{}",session.getId());
+        // 默认用户30min内不操作则让session失效
+        session.setMaxInactiveInterval(30 * 60);
+        User user = userMapper.selectUserByEmail(email);
         session.setAttribute(Constants.LOGIN_KEY, Constants.LOGIN_YES);
         session.setAttribute("user", user);
+        session.setAttribute("email", user.getEmail());
         return RespVO.getSuccess(ComMsg.LOGIN_SUCCESS);
     }
 
@@ -153,9 +158,11 @@ public class UserRouter {
     public RespVO userExit() {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.setAttribute(Constants.LOGIN_KEY, Constants.LOGIN_NO);
+            session.invalidate();
+            log.info("用户:{}，{}",session.getId(),"退出成功");
             return RespVO.getSuccess("退出成功");
         }
+        log.info("用户:{}，{}",request.getRequestedSessionId(),"退出失败");
         return RespVO.getFail(ComMsg.getFail("退出失败"));
     }
 
@@ -175,7 +182,7 @@ public class UserRouter {
         // 发送验证码 TODO 暂时关闭QQ邮箱发送验证码
         /* CommonUtil.threadPolls.submit(() ->emailTools.sendEmailCode(email, code)); */
         // 将验证码放入到redis数据库中
-        randomCodeUtils.saveCode(email, code);
+        codeRedis.saveCode(email, code);
         log.debug("验证码已发送:" + code);
         // TODO 测试
         return RespVO.getSuccess(ComMsg.getSuccess(code));

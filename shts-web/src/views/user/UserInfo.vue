@@ -1,7 +1,10 @@
 <template>
   <div id="loginAndRegister">
     <div class="nav">
-      <van-nav-bar title="信息填写" >
+      <van-nav-bar
+        title="个人信息填写"
+        right-text="跳过"
+        @click-right="()=>{this.$router.push('/home')}">
       </van-nav-bar>
     </div>
     <div
@@ -49,7 +52,7 @@
   import {updateUserInfo} from '../../config/getData'
 
   export default {
-    name: 'LoginAndRegister',
+    name: 'FillUserInfo',
     data: function () {
       return {
         phone: '',
@@ -58,21 +61,21 @@
       }
     },
     methods: {
-      commit:function () {
+      commit: function () {
         if (this.phone === '' || this.address === '' || this.remark === '') {
           this.$toast("参数不能为空");
           return;
         }
         updateUserInfo({
-          phone:this.phone,
-          address:this.address,
-          remark:this.remark
-        }).then(res=>{
-          if (res.status === 200) {
-            this.$router.push('/home');
-          } else {
-            this.$toast(res.errMsg);
+          phone: this.phone,
+          address: this.address,
+          remark: this.remark
+        }).then(res => {
+          if (res.status !== "success") {
+            this.$toast("个人信息台添加失败，请稍后到个人信息页面添加");
           }
+          this.$toast("注册成功，补全个人信息");
+          this.$router.push('/home');
         })
       }
     }

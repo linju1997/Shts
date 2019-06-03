@@ -9,7 +9,7 @@
     <van-cell-group style="overflow: hidden;">
       <van-field
         label="手机号码"
-        v-model="userInfo.phone"
+        v-model="phone"
         class="field-body">
       </van-field>
     </van-cell-group>
@@ -17,6 +17,7 @@
       <van-button
         type="default"
         :block="true"
+        @click="commit"
       >
         修改手机号码
       </van-button>
@@ -25,23 +26,33 @@
 </template>
 
 <script>
+  import {modifyPhone} from "../../../config/getData";
+  import {mapState} from 'vuex'
+
   export default {
     name: "ModifyUsername",
     data: function () {
       return {
-        userInfo: {}
+        phone: ''
       }
-
     },
-    created() {
-      getUserInfo().then(res => {
-        if (res.status === 200) {
-          this.userInfo = res.data;
-          this.$store.commit('changeUserInfo', this.userInfo);
-        } else {
-          this.$toast(res.errMsg);
+    methods: {
+      commit: function () {
+        if (this.phone === '' || this.phone.length !== 11) {
+          this.$toast("输入的手机号码有误");
+          return
         }
-      });
+        modifyPhone({phone: this.phone}).then(res => {
+          if (res.status === "success") {
+            this.$toast(res.data);
+          } else {
+            this.$toast(res.errMsg);
+          }
+        })
+      }
+    },
+    computed: {
+      ...mapState(['userInfo'])
     }
   }
 </script>

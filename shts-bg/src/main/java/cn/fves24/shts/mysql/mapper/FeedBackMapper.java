@@ -1,6 +1,6 @@
 package cn.fves24.shts.mysql.mapper;
 
-import cn.fves24.shts.model.FeedBack;
+import cn.fves24.shts.entity.FeedBack;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +32,7 @@ public interface FeedBackMapper {
      *
      * @return 查询结果
      */
-    @Select("select id,user_id, type, contact_type, contact, content, created, status " +
+    @Select("select id,user_id, type, contact_type, contact, content, create_time, status " +
             "from feedback")
     List<FeedBack> selectFeedBack();
 

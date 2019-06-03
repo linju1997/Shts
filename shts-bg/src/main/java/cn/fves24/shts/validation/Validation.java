@@ -2,14 +2,12 @@ package cn.fves24.shts.validation;
 
 import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.Constants;
-import cn.fves24.shts.model.Collection;
-import cn.fves24.shts.model.FeedBack;
-import cn.fves24.shts.model.Goods;
-import cn.fves24.shts.model.User;
-import io.netty.util.internal.StringUtil;
+import cn.fves24.shts.entity.Collection;
+import cn.fves24.shts.entity.FeedBack;
+import cn.fves24.shts.entity.Goods;
+import cn.fves24.shts.entity.User;
 import org.springframework.util.StringUtils;
 
-import java.sql.ResultSet;
 import java.util.regex.Pattern;
 
 /**
@@ -54,8 +52,8 @@ public class Validation {
      * @param code 验证码
      * @return 校验结果
      */
-    public static ValidationResult validateLoginParams(User user, String code) {
-        ValidationResult validateEmail = validateEmail(user.getEmail());
+    public static ValidationResult validateLoginParams(String email, String code) {
+        ValidationResult validateEmail = validateEmail(email);
         ValidationResult validateCode = validateCode(code);
         return getValidationResult(validateEmail, validateCode);
     }

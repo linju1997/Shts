@@ -1,6 +1,6 @@
 package cn.fves24.shts.mysql.mapper;
 
-import cn.fves24.shts.model.User;
+import cn.fves24.shts.entity.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +20,20 @@ public interface UserMapper {
      * @param email 用户邮箱
      * @return 用户信息
      */
-    @Select("select `id`,`username`,`email`,`phone`,`address`,`remark`,`created`,`modify` " +
+    @Select("select `id`,`username`,`email`,`phone`,`address`,`remark`,`create_time`,`modify` " +
             "from user " +
             "where `email` = #{email} ")
-    User selectUserInfo(String email);
+    User selectUserByEmail(String email);
+
+    /**
+     * 查询用户信息
+     * @param id 用户id
+     * @return 用户信息
+     */
+    @Select("select `id`,`username`,`email`,`phone`,`address`,`remark`,`create_time`,`modify` " +
+            "from user " +
+            "where `id` = #{id} ")
+    User selectUserById(int id);
 
     /**
      * 用户注册，用户只能通过邮箱注册
@@ -92,6 +102,6 @@ public interface UserMapper {
     Integer modifyAddress(@Param("email") String email, @Param("address") String address);
 
 
-    @Select("select id, username, email, phone, address, remark, created, modify from user")
+    @Select("select id, username, email, phone, address, remark, create_time, modify from user")
     List<User> getUsers();
 }

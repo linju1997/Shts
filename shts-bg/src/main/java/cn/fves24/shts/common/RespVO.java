@@ -7,7 +7,7 @@ package cn.fves24.shts.common;
  */
 public class RespVO {
     /**
-     * data 保存 api 返回的结果
+     * FetchGoodsInfomation 保存 api 返回的结果
      */
     private String status;
 

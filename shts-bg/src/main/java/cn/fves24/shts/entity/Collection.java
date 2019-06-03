@@ -1,4 +1,4 @@
-package cn.fves24.shts.model;
+package cn.fves24.shts.entity;
 
 import lombok.Data;
 
@@ -26,5 +26,5 @@ public class Collection {
     /**
      * 收藏时间
      */
-    private Date created;
+    private Date createTime;
 }

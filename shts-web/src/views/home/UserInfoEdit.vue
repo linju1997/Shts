@@ -4,7 +4,8 @@
       left-text="返回"
       left-arrow
       @click-left="()=>{this.$router.push('/home')}"
-      title="修改个人信息"></van-nav-bar>
+      title="修改个人信息">
+    </van-nav-bar>
     <van-cell-group>
       <van-cell
         title="用户名"
@@ -31,6 +32,12 @@
         is-link>
       </van-cell>
       <van-cell
+        title="个性签名"
+        :value="userInfo.remark"
+        to="/userinfo/modify/remark"
+        is-link>
+      </van-cell>
+      <van-cell
         title="注销账号"
         value="注销后无法恢复"
         @click="()=>{this.$toast({message:'暂时无法注销',duration:1000,position:'top'})}"
@@ -43,31 +50,17 @@
 
 <script>
   import {getUserInfo} from '@/config/getData'
+  import {mapState} from 'vuex'
 
   export default {
     name: "UserInfoEdit",
     data: function () {
-      return {
-        userInfo: {
-          phone: '',
-          address: '',
-          email: '',
-          username: ''
-        }
-      }
+      return{}
     },
     methods: {},
-    created() {
-      getUserInfo().then(res => {
-        if (res.status === 200) {
-          this.userInfo = res.data;
-          this.$store.commit('changeUserInfo', this.userInfo);
-        } else {
-          this.$toast(res.errMsg);
-        }
-      });
-    },
-    computed: {}
+    computed: {
+      ...mapState(['userInfo'])
+    }
   }
 </script>
 

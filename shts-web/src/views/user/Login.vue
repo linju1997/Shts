@@ -126,7 +126,7 @@
         }
 
         sendCode({email: this.email}).then(ret => {
-          if (ret.status === 200) {
+          if (ret.status === "success") {
             this.$toast(ret.data);
             this.countDownTime = 5;
             let timer = setInterval(() => {
@@ -158,7 +158,8 @@
           return;
         }
         login({email: this.email, code: this.code}).then(ret => {
-          if (ret.status === 200) {
+          if (ret.status === "success") {
+            this.$store.commit("login")
             this.$router.push("/home");
           } else {
             this.$toast(ret.errMsg);
@@ -167,7 +168,7 @@
       },
       register: function () {
         if (!this.$cm.validateUsername(this.username)) {
-          this.$toast("用户名不能为空");
+          this.$toast("用户名长度必须为2-6为字符");
           return
         }
         if (!this.$cm.validateEmail(this.email)) {
@@ -179,9 +180,9 @@
           return;
         }
         register({username: this.username, email: this.email, code: this.code}).then(ret => {
-          if (ret.status === 200) {
-            this.$toast(ret.data);
-            this.$router.push("/user/userinfo");
+          if (ret.status === "success") {
+            this.$store.commit("login")
+            this.$router.push("/userinfo");
           } else {
             this.$toast(ret.errMsg);
           }

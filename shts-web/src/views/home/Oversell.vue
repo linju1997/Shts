@@ -63,7 +63,6 @@
                         titleName: '标题',
                         desc: '商品描述',
                         price: '100',
-                        oldPrice: '199',
                         goosPic: 'https://img30.360buyimg.com/popWaterMark/jfs/t30361/216/596943799/306555/1d57adb1/5bf8b439Na4d2cc5c.jpg',
                         tag: '热销',
                         status: 2 // 交易完成
@@ -72,7 +71,6 @@
                         titleName: '标题',
                         desc: '商品描述',
                         price: '100',
-                        oldPrice: '199',
                         goosPic: 'https://img30.360buyimg.com/popWaterMark/jfs/t30361/216/596943799/306555/1d57adb1/5bf8b439Na4d2cc5c.jpg',
                         tag: '热销',
                         status: 2 // 交易完成
@@ -82,7 +80,6 @@
                         titleName: '标题',
                         desc: '商品描述',
                         price: '100',
-                        oldPrice: '199',
                         goosPic: 'https://img30.360buyimg.com/popWaterMark/jfs/t30361/216/596943799/306555/1d57adb1/5bf8b439Na4d2cc5c.jpg',
                         tag: '热销',
                         status: 1 // 已售出
@@ -110,8 +107,8 @@
 
   .product-card {
     background-color: white;
-    box-shadow: 1px 1px 1px #aaaaaa;
-    width: 96%;
-    margin: 10px auto;
+    box-shadow: 0 0 2px #aaaaaa;
+    width: 98%;
+    margin: 5px auto;
   }
 </style>

@@ -1,4 +1,4 @@
-package cn.fves24.shts.model;
+package cn.fves24.shts.entity;
 
 import lombok.Data;
 
@@ -49,5 +49,5 @@ public class FeedBack {
     /**
      * 反馈时间
      */
-    private Date created;
+    private Date createTime;
 }

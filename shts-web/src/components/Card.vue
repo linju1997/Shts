@@ -1,15 +1,14 @@
 <template>
-  <div class="card" @click="()=>{this.$router.push('/goods/'+this.id)}">
+  <div class="card" @click="()=>{this.$router.push('/publishGoods/'+this.id)}">
     <div class="image">
       <img :src="pic"/>
     </div>
     <div class="content">
       <div class="title">{{title}}</div>
-      <div class="describe">{{describe}}</div>
+      <div class="describe">{{describe.substr(0,30)}}......</div>
       <div style="position: absolute;bottom: 10px;">
         <van-tag style="margin: 0 5px;" plain type="success">{{price}}元</van-tag>
         <van-tag style="margin: 0 5px;" plain type="danger">数量:{{number}}</van-tag>
-        <van-tag style="margin: 0 5px;" plain type="primary">{{date}}</van-tag>
       </div>
     </div>
     <hr style="width: 98%;color: gray;opacity: 0.1;margin: 0;">

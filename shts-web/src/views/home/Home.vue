@@ -5,7 +5,7 @@
     >
       <div slot="right">
         <van-icon
-          @click="()=>{this.$toast({message:'还未开发',position:'top',duration:1000})}"
+          @click="()=>{this.$router.push('/userinfo/edit')}"
           name="setting-o">
         </van-icon>
       </div>
@@ -22,14 +22,8 @@
         >
       </van-col>
       <van-col span="15">
-        <div class="username">
-          <span>{{ userInfo.username }}</span>
-          <span
-            class="edit-userinfo"
-            @click="()=>{this.$router.push('/userinfo/edit')}"
-          >
-            个人资料
-          </span>
+        <div class="username" @click="()=>{this.$router.push('/userinfo/edit')}">
+          <span style="width: 120px;">{{ userInfo.username }}</span>
         </div>
       </van-col>
     </van-row>
@@ -37,7 +31,8 @@
     <van-panel
       title="个性签名"
       :desc="userInfo.remark"
-      status="OK"></van-panel>
+      status="OK">
+    </van-panel>
     <van-cell-group style="margin-top: 30px">
       <van-cell
         icon="records"
@@ -48,7 +43,7 @@
       </van-cell>
       <van-cell
         icon="cart-circle-o"
-        title="我买到的"
+        title="我的订单"
         to="/buy"
         is-link
         size="large">
@@ -89,38 +84,29 @@
 
 <script>
   import Footer from '@/components/Footer'
-  import {getUserInfo} from '@/config/getData'
+  import {exit} from "../../config/getData"
+  import {mapState} from 'vuex'
 
   export default {
     name: "Home",
     components: {Footer},
     data: function () {
-      return {
-        userInfo: {
-          username: '用户01'
-        }
-      }
+      return {}
     },
     methods: {
       exit: function () {
-        this.$router.push('/login');
+        exit()
+        this.$store.commit("exit")
+        this.$router.push('/login')
       }
     },
     created() {
-      getUserInfo().then(res => {
-        if (res.status === 200) {
-          this.userInfo = res.data;
-          this.$store.commit('changeUserInfo', this.userInfo);
-        } else {
-          this.$toast(res.errMsg);
-          if (res.status === 40002) {
-            this.$router.push('/login');
-          }
-        }
-      })
+    },
+    computed: {
+      ...mapState(['userInfo'])
     },
     beforeMount() {
-      this.$store.commit('changeActive', 4);
+      this.$store.commit('changeActive', 4)
     }
   }
 </script>
@@ -148,6 +134,7 @@
   }
 
   .exit {
+    width: 95%;
     margin: 20px 10px;
   }
 </style>

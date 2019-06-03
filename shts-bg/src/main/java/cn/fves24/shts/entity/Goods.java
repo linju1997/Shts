@@ -1,6 +1,9 @@
-package cn.fves24.shts.model;
+package cn.fves24.shts.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -10,6 +13,8 @@ import java.util.Date;
  * @author fves
  */
 @Data
+@ToString
+@NoArgsConstructor
 public class Goods {
     /**
      * 商品ID
@@ -50,10 +55,12 @@ public class Goods {
     /**
      * 出售时间
      */
+    @JsonFormat(timezone="GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 交易完成时间
      */
+    @JsonFormat(timezone="GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date saleTime;
 
     /**
@@ -69,7 +76,4 @@ public class Goods {
      */
     public static int SOLD = 2;
 
-
-    public Goods() {
-    }
 }

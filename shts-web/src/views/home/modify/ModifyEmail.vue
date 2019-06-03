@@ -22,9 +22,20 @@
           slot="button"
           size="small"
           type="primary"
-          @click="sendEmailCode()"
+          v-if="countDownTime<0"
+          @click="sendEmailCode"
         >
           发送验证码
+        </van-button>
+        <van-button
+          slot="button"
+          size="small"
+          type="primary"
+          disabled
+          v-if="countDownTime>=0"
+          @click="sendEmailCode"
+        >
+          {{ countDownTime }}
         </van-button>
       </van-field>
     </van-cell-group>
@@ -41,22 +52,30 @@
 </template>
 
 <script>
-  import {sendCode, modifyEmail, getUserInfo} from "../../../config/getData";
+  import {modifyEmail, sendCode} from "../../../config/getData";
+  import {mapState} from 'vuex'
 
   export default {
     name: "ModifyEmail",
     data: function () {
       return {
         code: '',
-        userInfo: {}
+        countDownTime: -1
       }
     },
     methods: {
       sendEmailCode: function () {
-        console.log(this.userInfo.email)
         sendCode({email: this.userInfo.email}).then(res => {
-          if (res.status === 200) {
+          if (res.status === "success") {
             this.$toast(res.data);
+            this.countDownTime = 5;
+            let timer = setInterval(() => {
+              if (this.countDownTime <= 0) {
+                this.countDownTime = -1;
+                clearInterval(timer);
+              }
+              this.countDownTime = this.countDownTime - 1;
+            }, 1000);
           } else {
             this.$toast(res.errMsg);
           }
@@ -64,7 +83,7 @@
       },
       commit: function () {
         modifyEmail({newEmail: this.userInfo.email, code: this.code}).then(res => {
-          if (res.status === 200) {
+          if (res.status === "success") {
             this.$toast(res.data);
           } else {
             this.$toast(res.errMsg);
@@ -72,15 +91,8 @@
         })
       }
     },
-    created() {
-      getUserInfo().then(res => {
-        if (res.status === 200) {
-          this.userInfo = res.data;
-          this.$store.commit('changeUserInfo', this.userInfo);
-        } else {
-          this.$toast(res.errMsg);
-        }
-      });
+    computed: {
+      ...mapState(['userInfo'])
     }
   }
 </script>

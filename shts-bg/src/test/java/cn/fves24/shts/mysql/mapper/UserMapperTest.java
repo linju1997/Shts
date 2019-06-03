@@ -1,6 +1,6 @@
 package cn.fves24.shts.mysql.mapper;
 
-import cn.fves24.shts.model.User;
+import cn.fves24.shts.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

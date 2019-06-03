@@ -2,12 +2,14 @@ package cn.fves24.shts.router;
 
 import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.RespVO;
-import cn.fves24.shts.model.Collection;
-import cn.fves24.shts.model.User;
+import cn.fves24.shts.entity.Collection;
+import cn.fves24.shts.entity.User;
 import cn.fves24.shts.mysql.mapper.CollectionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,7 +19,6 @@ import java.util.List;
  * @author fves
  */
 @RestController
-
 public class CollectionRouter {
 
     private CollectionMapper collectionMapper;
@@ -36,12 +37,12 @@ public class CollectionRouter {
     }
 
     @PostMapping("/collection/save")
-    public RespVO collection(Integer gid) {
+    public RespVO collection(@SessionAttribute("email") String email, @RequestParam("gid") Integer gid) {
         if (gid == null) {
             return RespVO.getFail(ComMsg.PARAMETER_ERROR);
         }
         try {
-            Integer save = collectionMapper.save(getCurrentUser().getId(), gid);
+            Integer save = collectionMapper.save(email, gid);
             if (save != null && save == 1) {
                 return RespVO.getSuccess(ComMsg.COLLECTION_SUCCESS);
             }

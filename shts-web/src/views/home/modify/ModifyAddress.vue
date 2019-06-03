@@ -27,13 +27,13 @@
 </template>
 
 <script>
-  import {getUserInfo, modifyAddress} from "../../../config/getData";
+  import {modifyAddress} from "../../../config/getData";
+  import {mapState} from 'vuex'
 
   export default {
     name: "AddressEdit",
     data: function () {
       return {
-        userInfo: {}
       }
     },
     methods: {
@@ -43,7 +43,7 @@
           return;
         }
         modifyAddress({address: this.userInfo.address}).then(res => {
-          if (res.status === 200) {
+          if (res.status === "success") {
             this.$toast(res.data);
           } else {
             this.$toast(res.errMsg);
@@ -51,15 +51,8 @@
         })
       }
     },
-    created() {
-      getUserInfo().then(res => {
-        if (res.status === 200) {
-          this.userInfo = res.data;
-          this.$store.commit('changeUserInfo', this.userInfo);
-        } else {
-          this.$toast(res.errMsg);
-        }
-      });
+    computed: {
+      ...mapState(['userInfo'])
     }
   }
 </script>

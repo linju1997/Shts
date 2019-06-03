@@ -2,14 +2,13 @@ package cn.fves24.shts.router;
 
 import cn.fves24.shts.common.ComMsg;
 import cn.fves24.shts.common.RespVO;
-import cn.fves24.shts.model.FeedBack;
-import cn.fves24.shts.model.User;
+import cn.fves24.shts.entity.FeedBack;
+import cn.fves24.shts.entity.User;
 import cn.fves24.shts.mysql.mapper.FeedBackMapper;
 import cn.fves24.shts.validation.Validation;
 import cn.fves24.shts.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;

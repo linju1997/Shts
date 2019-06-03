@@ -1,0 +1,15 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-FetchGoodsInfomation);
+
+# 商品详细信息
+GET https://2.taobao.com/item.htm?id=593948514966&fmdirect=true
+
+###
+# 商品描述
+GET https://osdsc.alicdn.com/i5/590/940/593947874084/TB1OcRtU3HqK1RjSZFk8qt.WFla.desc%7Cvar%5Edesc%3Bsign%5E0e0a26389ebb580382fa1b9b63bc3844%3Blang%5Egbk%3Bt%5E1557372806
+
+###

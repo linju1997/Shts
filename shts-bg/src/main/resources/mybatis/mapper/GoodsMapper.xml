@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fves24.shts.mysql.mapper.GoodsMapper">
+    <!--<resultMap id="goods" type="cn.fves24.shts.entity.Goods">-->
+        <!--<id column="id" property="id"/>-->
+        <!--<id column="user_id" property="userId"/>-->
+        <!--<id column="title" property="title"/>-->
+        <!--<id column="desc" property="desc"/>-->
+        <!--<id column="type" property="type"/>-->
+        <!--<id column="price" property="price"/>-->
+        <!--<id column="quantity" property="quantity"/>-->
+        <!--<id column="img" property="img"/>-->
+        <!--<id column="status" property="status"/>-->
+        <!--<id column="create_time" property="createTime"/>-->
+        <!--<id column="create_time" property="createTime"/>-->
+    <!--</resultMap>-->
+
+    <select id="selectGoodsTop10" resultType="cn.fves24.shts.entity.Goods">
+        select id,
+               user_id,
+               title,
+               `desc`,
+               type,
+               price,
+               quantity,
+               img,
+               status,
+               create_time,
+               sale_time
+        from (
+                 select id,
+                        user_id,
+                        title,
+                        `desc`,
+                        type,
+                        price,
+                        quantity,
+                        img,
+                        status,
+                        create_time,
+                        sale_time
+                 from goods
+                 order by create_time desc
+             ) as g
+        limit 0,10
+    </select>
+    <select id="selectGoodsLast4" resultType="cn.fves24.shts.entity.Goods">
+        select id,
+               user_id,
+               title,
+               `desc`,
+               type,
+               price,
+               quantity,
+               img,
+               status,
+               create_time,
+               sale_time
+        from (
+                 select id,
+                        user_id,
+                        title,
+                        `desc`,
+                        type,
+                        price,
+                        quantity,
+                        img,
+                        status,
+                        create_time,
+                        sale_time
+                 from goods
+                 order by create_time
+             ) as g
+        limit 0,4
+    </select>
+</mapper>

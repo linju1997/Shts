@@ -1,18 +1,29 @@
-package cn.fves24.shts.common;
+package cn.fves24.shts.redis;
 
+import cn.fves24.shts.common.ComMsg;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Random Code
- * 保存验证码，到redis数据库
+ * 保存验证码，到 redis数据库
+ *
  * @author fves
  */
 @Component
-public class RandomCodeUtils {
-    private final Map<String, String> hashMap = new HashMap<>();
+public class CodeRedis {
+
+    private final RedisTemplate<String, String> codeRedis;
+
+    @Autowired
+    public CodeRedis(RedisTemplate<String, String> codeRedis) {
+        this.codeRedis = codeRedis;
+    }
 
     /**
      * 保存验证码，并设置5分钟过期
@@ -21,7 +32,7 @@ public class RandomCodeUtils {
      * @param code  验证码
      */
     public void saveCode(String email, String code) {
-        hashMap.put(email, code);
+        codeRedis.opsForValue().set(email, code);
     }
 
 
@@ -32,15 +43,16 @@ public class RandomCodeUtils {
      * @return 验证码
      */
     private String getCode(String email) {
-        return hashMap.get(email);
+        return codeRedis.opsForValue().get(email);
     }
 
     /**
      * 删除验证码
+     *
      * @param email 用户邮箱
      */
-    private  void deleteCode(String email) {
-        hashMap.remove(email);
+    private void deleteCode(String email) {
+        codeRedis.delete(email);
     }
 
     /**

@@ -1,4 +1,4 @@
-package cn.fves24.shts.model;
+package cn.fves24.shts.entity;
 
 import lombok.Data;
 

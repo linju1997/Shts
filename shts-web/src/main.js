@@ -6,12 +6,15 @@ import router from './router';
 import store from './store';
 import common from './common';
 import 'vant/lib/index.css';
+import './interception'
 
 Vue.use(Vant);
 Toast.setDefaultOptions({position: 'top'});
 Vue.use(Toast);
 Vue.config.productionTip = false;
 Vue.prototype.$cm = common;
+
+Vue.config.devtools = true
 
 new Vue({
   router,
